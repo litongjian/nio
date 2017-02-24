@@ -1,5 +1,7 @@
 package game.nio.commons;
 
+import game.nio.base.UserInterface;
+
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -55,6 +57,23 @@ public final class ClassScanTool {
                 list.add(Class.forName(className));
             } catch (ClassNotFoundException e) {
                 System.out.println(className+"类不存在");
+            }
+        }
+        return list;
+    }
+
+    public static List<Class> scanClassList(String packageName, Class<? extends UserInterface> itf) throws ClassNotFoundException {
+        String path = packageName.replaceAll("\\.","/");
+        File dir = new File(path);
+        List<Class> list = new LinkedList<>();
+        if (dir.isDirectory()){
+            File[] files = dir.listFiles(file -> file.isFile()&&file.getName().endsWith(".class"));
+            for (File cf:files){
+                String cn = packageName+"."+cf.getName().replaceAll("\\.class","");
+                Class clz = Class.forName(cn);
+                if (itf.isAssignableFrom(clz)){
+                    list.add(clz);
+                }
             }
         }
         return list;

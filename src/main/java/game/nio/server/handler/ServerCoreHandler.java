@@ -1,5 +1,6 @@
 package game.nio.server.handler;
 
+import game.nio.annotation.UserHandler;
 import game.nio.commons.CheckSupport;
 import game.nio.commons.DataSupport;
 import game.nio.expr.MsgWrongException;
@@ -22,6 +23,7 @@ import io.netty.util.ReferenceCountUtil;
  * 路径：game.nio.server.handler
  * 概要：服务端核心处理器
  */
+@UserHandler(name = "server.core",index = 1)
 public final class ServerCoreHandler extends ChannelHandlerAdapter{
 
     @Override

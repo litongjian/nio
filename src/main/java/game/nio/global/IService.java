@@ -1,6 +1,7 @@
 package game.nio.global;
 
 import com.alibaba.fastjson.JSONObject;
+import game.nio.base.UserInterface;
 import game.nio.expr.ProcessFiledException;
 import game.nio.expr.SystemException;
 import game.nio.po.ReqData;
@@ -11,7 +12,7 @@ import game.nio.po.ReqData;
  * 路径：game.nio.global
  * 概要：基础服务接口
  */
-public interface IService {
+public interface IService extends UserInterface{
 
     /**
      * 业务请求处理

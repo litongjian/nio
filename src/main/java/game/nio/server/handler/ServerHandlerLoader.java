@@ -1,10 +1,13 @@
 package game.nio.server.handler;
 
+import game.nio.annotation.UserHandler;
+import game.nio.server.ServerAppContext;
+import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.serialization.ClassResolvers;
-import io.netty.handler.codec.serialization.ObjectDecoder;
-import io.netty.handler.codec.serialization.ObjectEncoder;
+
+import java.util.List;
 
 /**
  * 所属项目：nio
@@ -15,6 +18,13 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 public class ServerHandlerLoader extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
-        socketChannel.pipeline().addLast(new ObjectEncoder()).addLast(new ObjectDecoder(ClassResolvers.cacheDisabled(null))).addLast(new ServerCoreHandler());
+        ChannelPipeline p = socketChannel.pipeline();
+        p.addLast(ServerAppContext.decoder());
+        p.addLast(ServerAppContext.encoder());
+        List<ChannelHandlerAdapter> list = ServerAppContext.handlerList();
+        list.forEach(hd->{
+            UserHandler uh = hd.getClass().getAnnotation(UserHandler.class);
+            p.addLast(uh.name(),hd);
+        });
     }
 }
